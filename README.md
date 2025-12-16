@@ -40,11 +40,11 @@ Project ini dibangun menggunakan *tech stack* berikut:
 
 | Landing & Login | Home Screen (List) | Add Data (Dialog) |
 |:---:|:---:|:---:|
-| <img src="AssetsTravelupa/login_screen.jpg" width="200" /> | <img src="AssetsTravelupa/home_screen.jpg" width="200" /> | <img src="AssetsTravelupa/add_dialog.jpg" width="200" /> |
+| <img src="AssetsTravelupa/Screenshot_2025-12-16-19-30-42-898_com.example.travelupa.jpg" width="200" /> | <img src="AssetsTravelupa/Screenshot_2025-12-16-20-23-16-861_com.example.travelupa.jpg" width="200" /> | <img src="AssetsTravelupa/Screenshot_2025-12-16-19-49-11-614_com.example.travelupa.jpg" width="200" /> |
 
 | Camera & Gallery | Room & Firebase Sync |
 |:---:|:---:|
-| <img src="AssetsTravelupa/gallery_screen.jpg" width="200" /> | <img src="AssetsTravelupa/firebase_console.jpg" width="200" /> |
+| <img src="AssetsTravelupa/Screenshot_2025-12-16-20-27-10-231_com.example.travelupa.jpg" width="200" /> | <img src="AssetsTravelupa/Screenshot_2025-12-16-19-49-26-486_com.example.travelupa.jpg" width="200" /> |
 
 *(Catatan: Gambar di atas diambil dari folder `AssetsTravelupa`)*
 

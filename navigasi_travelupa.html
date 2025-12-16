@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alur Navigasi Travelupa - Final</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --primary: #6366f1; /* Indigo */
+            --success: #10b981; /* Emerald */
+            --warning: #f59e0b; /* Amber */
+            --error: #ef4444;   /* Red */
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --line-color: #475569;
+            --line-thickness: 3px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        /* --- Container Utama --- */
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        /* --- Nodes (Kotak-kotak) --- */
+        .node {
+            background: var(--card-bg);
+            border: 2px solid var(--line-color);
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-align: center;
+            position: relative;
+            width: 200px;
+            z-index: 10;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            color: var(--text-main);
+        }
+
+        .node:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+            border-color: var(--primary);
+        }
+
+        .node small {
+            display: block;
+            margin-top: 5px;
+            font-weight: 400;
+            color: var(--text-sub);
+            font-size: 0.85rem;
+        }
+
+        /* Tipe Node */
+        .start { border-color: var(--primary); box-shadow: 0 4px 0 var(--primary); }
+        .decision { border-color: var(--warning); border-radius: 30px; padding: 20px 40px; }
+        .screen { border-color: var(--success); box-shadow: 0 4px 0 var(--success); }
+        .action { border-color: var(--error); border-style: dashed; }
+        .login-box { border-color: var(--text-sub); }
+
+        /* --- Sistem Garis (The Bridge) --- */
+        .arrow-down {
+            font-size: 24px;
+            color: var(--line-color);
+            margin: 10px 0;
+        }
+
+        /* Container Percabangan */
+        .branch-wrapper {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+            margin-top: 60px; /* Jarak antara Decision dan Cabang */
+            gap: 40px;
+        }
+
+        /* Kolom Kiri dan Kanan */
+        .branch-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1; /* Membagi lebar sama rata (50% - 50%) */
+            position: relative;
+        }
+
+        /* --- GARIS PENGHUBUNG (Mekanik Utama) --- */
+        
+        /* 1. Tiang Tengah (Dari Decision turun ke bawah) */
+        .connector-pole {
+            position: absolute;
+            top: -60px; /* Menempel ke Decision */
+            left: 50%;
+            transform: translateX(-50%);
+            width: var(--line-thickness);
+            height: 30px; /* Turun setengah jalan */
+            background-color: var(--line-color);
+        }
+
+        /* 2. Palang Horizontal (Jembatan Kiri ke Kanan) */
+        .connector-bar {
+            position: absolute;
+            top: -30px; /* Posisi vertikal di tengah margin */
+            left: 25%;  /* Mulai dari tengah kolom kiri */
+            right: 25%; /* Berakhir di tengah kolom kanan */
+            height: var(--line-thickness);
+            background-color: var(--line-color);
+        }
+
+        /* 3. Tiang Turun (Dari ujung palang ke Node Cabang) */
+        .connector-drop-left, .connector-drop-right {
+            position: absolute;
+            top: -30px;
+            width: var(--line-thickness);
+            height: 30px;
+            background-color: var(--line-color);
+        }
+        .connector-drop-left { left: 50%; } /* Di tengah kolom kiri */
+        .connector-drop-right { left: 50%; } /* Di tengah kolom kanan */
+
+        /* --- Label Ya / Tidak --- */
+        .label-decision {
+            position: absolute;
+            top: -42px; /* Duduk pas di atas garis horizontal */
+            background-color: var(--bg-color); /* Menutupi garis di belakang teks */
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            border: 1px solid var(--line-color);
+            z-index: 5;
+            white-space: nowrap;
+        }
+        .label-left { left: 25%; transform: translateX(-50%); }
+        .label-right { right: 25%; transform: translateX(50%); }
+
+        /* --- Penjelasan --- */
+        .explanation {
+            margin-top: 80px;
+            padding: 30px;
+            border-radius: 16px;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 800px;
+        }
+        .explanation h2 { color: var(--primary); border-bottom: 2px solid #334155; padding-bottom: 10px; margin-top: 0;}
+        .highlight { color: var(--success); font-weight: bold; }
+
+        /* Mobile Fix */
+        @media (max-width: 700px) {
+            .branch-wrapper { flex-direction: column; gap: 0; margin-top: 20px; }
+            .connector-pole, .connector-bar, .connector-drop-left, .connector-drop-right, .label-decision { display: none; }
+            .branch-col { margin-bottom: 40px; width: 100%; }
+            .branch-col::before { content: "▼"; color: var(--line-color); margin-bottom: 10px; }
+            .branch-col:first-child::after { content: "--- ATAU ---"; color: var(--text-sub); margin: 20px 0; opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Alur Navigasi Travelupa</h1>
+
+    <div class="flowchart">
+        
+        <div class="node start">Start: MainActivity</div>
+        <div class="arrow-down">⬇</div>
+
+        <div class="node decision">Cek: Apakah User Login?</div>
+
+        <div class="branch-wrapper">
+            
+            <div class="connector-pole"></div>      <div class="connector-bar"></div>       <div class="label-decision label-left">Ya (User != null)</div>
+            <div class="label-decision label-right">Tidak (User == null)</div>
+
+            <div class="branch-col">
+                <div class="connector-drop-left"></div> <div class="node screen">
+                    🏠 Home Screen
+                    <small>RekomendasiTempat</small>
+                </div>
+                
+                <div class="arrow-down">⬇</div>
+                
+                <div class="node action">Klik Logout</div>
+
+                <div style="margin-top: 15px; font-size: 12px; color: var(--text-sub); border-top: 1px dashed var(--line-color); width: 80%; padding-top: 5px;">
+                    ⟳ Kembali ke Greeting
+                </div>
+            </div>
+
+            <div class="branch-col">
+                <div class="connector-drop-right"></div> <div class="node screen" style="margin-bottom: 10px;">👋 Greeting Screen</div>
+                <div class="arrow-down">⬇</div>
+                <div class="node screen" style="margin-bottom: 10px;">🔐 Login Screen</div>
+                <div class="arrow-down">⬇</div>
+                <div class="node login-box">✅ Login Berhasil</div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="explanation">
+        <h2>Penjelasan Alur Program</h2>
+        <p>
+            1. <strong>Start (MainActivity):</strong> Aplikasi dimulai dengan memeriksa `currentUser` dari Firebase.<br><br>
+            2. <strong>Logika Percabangan:</strong>
+            <br> &bull; <span class="highlight">Jalur Kiri (Sudah Login):</span> User langsung masuk ke Home Screen. Tombol Logout akan mengembalikan user ke Greeting.
+            <br> &bull; <span class="highlight">Jalur Kanan (Belum Login):</span> User disambut di Greeting Screen, lalu menekan tombol Mulai untuk Login. Jika sukses, user akan dipindahkan ke Home.
+        </p>
+    </div>
+
+</body>
+</html>
